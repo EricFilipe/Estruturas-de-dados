@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<time.h>
 
-#define tamanho 20
+#define tamanho 10
 
 int lista[tamanho];
 int ordenado[tamanho];
