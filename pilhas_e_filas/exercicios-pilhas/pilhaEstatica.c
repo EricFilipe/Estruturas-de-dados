@@ -5,8 +5,7 @@
 
 struct spilha {
     int dados[tamanho];
-    int inicio;
-    int fim;
+    int topo;
 };
 
 struct spilha pilha;
@@ -19,8 +18,7 @@ void showPilha();
 
 int main() {
     int option = 1;
-    pilha.inicio = 0;
-    pilha.fim= 0;
+    pilha.topo = 0;
 
     while (option != 0)
     {    
@@ -67,34 +65,36 @@ void push() {
     printf("\nDigite o valor: ");
     scanf("%d", & value);
 
-    if(pilha.fim == tamanho) {
+    if(pilha.topo == tamanho) {
         printf("\nPilha ja esta cheia!\n");
     } else {
-        pilha.dados[pilha.fim] = value;
-        pilha.fim++;
+        pilha.dados[pilha.topo] = value;
+        pilha.topo++;
     }
 }
 
 void pop() {
-    if(pilha.fim == pilha.inicio) {
+    if(pilha.topo == 0) {
         printf("\nPilha vazia!");
     } else {
-        pilha.dados[pilha.fim - 1] = 0;
-        pilha.fim--; 
+        pilha.dados[pilha.topo - 1] = 0;
+        pilha.topo--; 
     }
 }
 
 void top() {
-    if(pilha.fim != pilha.inicio) {
-        int top = pilha.dados[pilha.fim - 1];
+    if(pilha.topo != 0) {
+        int top = pilha.dados[pilha.topo - 1];
         printf("\nElemento do topo: %d\n", top);
+    } else {
+        printf("Pilha vazia");
     }
 }
 
 void checkStatus() {
-    if(pilha.fim == pilha.inicio) {
+    if(pilha.topo == 0) {
         printf("\nPilha Vazia!\n");
-    } else if (pilha.fim == tamanho)
+    } else
     {
         printf("\nPilha cheia!\n");
     }
@@ -102,7 +102,7 @@ void checkStatus() {
 }
 
 void showPilha() {
-    for(int i = 0; i < tamanho; i++) {
-        printf("\n[%d]\n", pilha.dados[i]);
+    for(int i = pilha.topo - 1; i >= 0; i--) {
+        printf("[%d]", pilha.dados[i]);
     }
 }

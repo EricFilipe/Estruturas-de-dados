@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 
 struct no {
     int value;
@@ -7,25 +8,23 @@ struct no {
 };
 
 typedef struct no *ptr_pilha;
-ptr_pilha pilha;
 
-void push(ptr_pilha pilha);
-void pop(ptr_pilha pilha);
-void top(ptr_pilha pilha);
-void checkStatus();
-void showPilha();
+void push(ptr_pilha *pilha);
+void pop(ptr_pilha *pilha);
+void top(ptr_pilha *pilha);
+void checkStatus(ptr_pilha pilha);
+void showPilha(ptr_pilha pilha);
 
 int main() {
+    srand(time(NULL));
     int option = 1;
     
-    pilha = (ptr_pilha)malloc(sizeof(struct no));
-
-    pilha->value = 0;
-    pilha->next = NULL;
+    ptr_pilha pilha = NULL;  
+    ptr_pilha *pPilha = &pilha;
 
     while (option != 0)
     {    
-        showPilha();
+        showPilha(pilha);
 
         printf("\nEscolha uma opcao:\n\n");
 
@@ -40,19 +39,19 @@ int main() {
         switch (option)
         {
         case 1:
-            push(pilha);
+            push(pPilha);
             break;
 
         case 2:
-            pop(pilha);
+            pop(pPilha);
             break;
 
         case 3:
-            top(pilha);
+            top(pPilha);
             break;
 
         case 4:
-            checkStatus();
+            checkStatus(pilha);
             break;
         
         default:
@@ -60,73 +59,63 @@ int main() {
         }
     }
 
+    free(pilha);
 }
 
-void push(ptr_pilha pilha) {
-    int value;
+void push(ptr_pilha *pilha) {
+    ptr_pilha new = (ptr_pilha)malloc(sizeof(struct no));
+    new->value = rand()%50;
+    new->next = *pilha;
+    *pilha = new;
+}
 
-    printf("\nDigite o valor: ");
-    scanf("%d", & value);
-    
-    while (pilha->next != NULL)
-    {
-        pilha = pilha->next;
+void pop(ptr_pilha *pilha) {
+     if(*pilha == NULL) {
+        printf("Pilha vazia");
+        return;
     }
 
-    pilha->next = (ptr_pilha)malloc(sizeof(struct no));
-
-    pilha = pilha->next;
-
-    pilha->value = value;
-    pilha->next = NULL;
-    
+    ptr_pilha temp = *pilha;
+    *pilha = (*pilha)->next;
+    free(temp);
 }
 
-void pop(ptr_pilha pilha) {
-    ptr_pilha actual = pilha;
-
-    while (pilha->next != NULL)
-    {
-        actual = pilha;
-        pilha = pilha->next;
+void top(ptr_pilha *pilha) {
+    if(*pilha == NULL) {
+        printf("Pilha vazia");
+        return;
     }
 
-    actual->next = NULL;
+    printf("\nElemento do topo: %d\n", (*pilha)->value);
 }
 
-void top(ptr_pilha pilha) {
-    while (pilha->next != NULL)
-    {
-        pilha = pilha->next;
-    }
-
-    printf("\nElemento do topo: %d", pilha->value);
-}
-
-void checkStatus() {
-   int size = 0;
-
-   while (pilha->next != NULL)
-   {
-        pilha = pilha->next;
-        size++;
-   }
-   
-   if(size > 0) {
-        printf("\nPilha dinamica 'cheia'\n");
+void checkStatus(ptr_pilha pilha) {
+   if(pilha == NULL) {
+        printf("Pilha vazia\n");
    } else {
-        printf("\nPilha vazia\n");
+        int count = 1;
+        while (pilha->next != NULL)
+        {
+            count++;
+            pilha = pilha->next;
+        }
+
+        printf("Pilha com %d elementos\n", count);
+        
    }
     
 }
 
-void showPilha() {
+void showPilha(ptr_pilha pilha) {
+    if(pilha == NULL) {
+        return;
+    }
+
     while (pilha->next != NULL)
     {
         printf("[%d]", pilha->value);
         pilha = pilha->next;
     }
-
+   
     printf("[%d]", pilha->value);
-    
 }
