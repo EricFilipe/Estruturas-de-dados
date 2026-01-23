@@ -107,8 +107,7 @@ void grafo_remover() {
 
 //Mostrar vertices
 void grafo_desenhar() {
-    int c = 0;
-
+    
     printf("\n[");
     for(int i = 0; i < tamanho; i++) {
         printf("%d,", vertices[i]);
