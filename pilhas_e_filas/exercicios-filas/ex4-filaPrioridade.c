@@ -32,6 +32,12 @@ int main (void) {
 
     showFila(f);
 
+    front(f);
+
+    dequeue(f);
+    front(f);
+
+    return 0;
 }
 
 bool isEmpty(FILA *f) {
@@ -49,37 +55,33 @@ void enqueue(FILA *f, int valor, int prioridade) {
         f->fim = novo;
     } else {
         PONT end = f->inicio;
-        
+
         f->fim->prox = novo;
 
-        while (end->prox != NULL)
+        while (end)
         {
             if(novo->prioridade < end->prioridade) {
-                PONT temp = end;
-                novo->prox = temp;
-                end = novo;
-                novo = temp;
-                novo->prox = NULL;
-                if(f->inicio->prox == NULL) {
-                    f->inicio = end;
-                }
-            } else if(novo->prioridade == end->prioridade && novo != end->prox) {
-                PONT temp = end->prox;
-                end->prox = novo;
-                novo->prox = temp;
-                f->fim->prox = NULL;
-            }
+                int tempValor = end->valor;
+                int tempPrioridade = end->prioridade;
 
+                end->valor = novo->valor;
+                end->prioridade = novo->prioridade;
+
+                novo->valor = tempValor;
+                novo->prioridade = tempPrioridade;
+            }
+            
             end = end->prox;
         }
 
-        f->fim = end;
+        f->fim = novo;
+       
     }
 }
 
 void showFila(FILA *f) {
     if (isEmpty(f)) {
-        printf("Fila vazia.");
+        printf("Fila vazia.\n");
         return;
     }
     
@@ -93,4 +95,26 @@ void showFila(FILA *f) {
 
     printf("(%d,p%d) \n\n", end->valor, end->prioridade);
     
+}
+
+void dequeue(FILA *f) {
+    if(isEmpty(f)) {
+        printf("Fila vazia.\n");
+        return;
+    }
+
+    PONT apagar = f->inicio;
+    f->inicio = f->inicio->prox;
+    free(apagar);
+
+    if(f->inicio == NULL) f->fim = NULL;
+}
+
+void front(FILA *f) {
+    if(isEmpty(f)) {
+        printf("Fila vazia.\n");
+        return;
+    }
+
+    printf("1⁰ elemento = (%d,p%d)\n\n", f->inicio->valor, f->inicio->prioridade);
 }
