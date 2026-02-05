@@ -26,7 +26,7 @@ int main() {
 
     option = 1;
 
-    //criando o primeiro no na pilha
+    //criando o primeiro no na pilha, no cabeca
     pilha = (ptr_no)malloc(sizeof(struct no));
 
     pilha->dado = 0;

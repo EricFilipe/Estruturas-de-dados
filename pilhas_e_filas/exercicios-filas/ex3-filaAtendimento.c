@@ -67,7 +67,7 @@ void atender(FILA *f) {
         return;
     }
 
-    f->inicio->tempo -= 1;
+    f->inicio->tempo--;
 
     printf("\nAtendendo Pessoa %d (tempo restante: %d)\n", f->inicio->id, f->inicio->tempo);
 

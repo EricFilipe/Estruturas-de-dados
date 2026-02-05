@@ -26,7 +26,7 @@ int main() {
 
     option = 1;
 
-    //Criando primeiro no da lista
+    //Criando primeiro no da lista, no cabeca
     lista = (ptr_no)malloc(sizeof(struct no));
 
     lista->dado = 0;
