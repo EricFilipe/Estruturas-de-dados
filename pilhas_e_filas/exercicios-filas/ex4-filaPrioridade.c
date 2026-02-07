@@ -29,7 +29,8 @@ int main (void) {
     enqueue(f, 20, 1);
     enqueue(f, 30, 2);
     enqueue(f, 40, 1);
-    
+    enqueue(f, 40, 4);
+    enqueue(f, 13, 3);
 
     showFila(f);
 
@@ -57,35 +58,29 @@ void enqueue(FILA *f, int valor, int prioridade) {
     } else {
         PONT end = f->inicio;
 
-        //f->fim->prox = novo;
-        //f->fim = novo;
-
-        if(novo->prioridade < end->prioridade) {
-            f->inicio = novo;
-            novo->prox = end;
-            while (end->prox != NULL)
-            {
-                end = end->prox;
+        while (end)
+        {
+            if(novo->prioridade < end->prioridade) {
+                if(end == f->inicio){
+                    f->inicio = novo;
+                    f->inicio->prox = end;
+                }
+            } else if (end->prox != NULL) {
+                if(novo->prioridade < end->prox->prioridade) {
+                    PONT temp = end->prox;
+                    end->prox = novo;
+                    novo->prox = temp;
+                    break;
+                }
+            } else {
+                f->fim->prox = novo;
+                f->fim = novo;
+                break;
             }
             
-            f->fim = end;
-        } else if (novo->prioridade < f->fim->prioridade)
-        {
-            if(novo->prioridade == end->prox->prioridade) {
-                PONT temp = end->prox->prox;
-                end->prox->prox = novo;
-                novo->prox = temp;
-            } else {
-                PONT temp = end->prox;
-                end->prox = novo;
-                novo->prox = temp;
-            }
-        } else {
-            f->fim->prox = novo;
-            f->fim = novo;
+            
+            end = end->prox;
         }
-        
-       
     }
 }
 
