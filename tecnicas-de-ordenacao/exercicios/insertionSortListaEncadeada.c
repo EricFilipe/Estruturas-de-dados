@@ -56,28 +56,28 @@ void insertionSort(PONT *l) {
     while (atual)
     {
 
-        PONT end = *l;
+        PONT posicao = *l;
 
-        while (end->prox != NULL && end != atual)
-        {
-            if(atual->valor < end->valor) {
-                temp = atual->prox;
-                anterior->prox = temp;
-                atual->prox = end;
-                *l = atual;
-                atual = anterior;
-                break;
-            } else if(atual->valor < end->prox->valor) {
-                temp = end->prox;
-                end->prox = atual;
-                anterior->prox = atual->prox;
-                atual->prox = temp;
-                atual = anterior;
-                break;
+        if(atual->valor < posicao->valor) {
+            temp = atual->prox;
+            anterior->prox = temp;
+            atual->prox = *l;
+            *l = atual;
+            atual = anterior;
+        } else {
+            while (posicao->prox != atual)
+            {
+                if(atual->valor < posicao->prox->valor) {
+                    temp = posicao->prox;
+                    posicao->prox = atual;
+                    anterior->prox = atual->prox;
+                    atual->prox = temp;
+                    atual = anterior;
+                    break;
+                }
+
+                posicao = posicao->prox;
             }
-
-
-            end = end->prox;
         }
         
         anterior = atual;
