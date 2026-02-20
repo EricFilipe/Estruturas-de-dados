@@ -49,6 +49,8 @@ void inserir(PONT *l, int valor) {
 }
 
 void insertionSort(PONT *l) {
+    if(isEmpty(l) || (*l)->prox == NULL) return;
+
     PONT anterior = *l;
     PONT atual = anterior->prox;
     PONT temp;
@@ -85,6 +87,33 @@ void insertionSort(PONT *l) {
     }
     
 }
+
+//Versao classica
+// void insertionSort(PONT *l) {
+//     PONT ordenada = NULL;
+
+//     while (*l != NULL)
+//     {
+//         PONT atual = *l;
+//         *l = atual->prox;
+
+//         if(ordenada == NULL || atual->valor < ordenada->valor) {
+//             atual->prox = ordenada;
+//             ordenada = atual;
+//         } else {
+//             PONT p = ordenada;
+//             while (p->prox != NULL && p->prox->valor <= atual)
+//             {
+//                 p = p->prox;
+//             }
+
+//             atual->prox = p->prox;
+//             p->prox = atual;            
+//         }
+//     }
+    
+//     *l = ordenada;
+// }
 
 void showLista(PONT l) {
     if(isEmpty(l)) {
