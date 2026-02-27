@@ -11,20 +11,19 @@ void selectionSort(PONT *list);
 void showList(PONT list);
 
 int main(void) {
-    PONT *list = (PONT *) malloc(sizeof(NO));
-    *list = NULL;
+    PONT list = NULL;
 
-    insert(list, 5);
-    insert(list, 1);
-    insert(list, 9);
-    insert(list, 3);
-    insert(list, 7);
+    insert(&list, 5);
+    insert(&list, 1);
+    insert(&list, 9);
+    insert(&list, 3);
+    insert(&list, 7);
 
-    showList(*list);
+    showList(list);
 
-    selectionSort(list);
+    selectionSort(&list);
 
-    showList(*list);
+    showList(list);
 
     return 0;
 }
