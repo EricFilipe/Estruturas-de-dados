@@ -32,6 +32,9 @@ int main(void) {
     showList(list);
 
     mergeSort(&list);
+    printf("\n");
+
+    showList(list);
 }
 
 void insert(PONT *list, int value) {
@@ -66,6 +69,8 @@ int calcLength(PONT *list) {
 }
 
 void mergeSort(PONT *list) {
+    PONT ordenada;
+
     if((*list)->next != NULL) {
         int length = calcLength(list);
         int half = length / 2;
@@ -81,11 +86,90 @@ void mergeSort(PONT *list) {
         PONT b = end;
         before->next = NULL;
 
-        printf("lado esquerdo: %d\n", *a);
-        printf("lado direito: %d\n", *b);
+        printf("lado esquerdo: %d\n", a->value);
+        printf("lado direito: %d\n", b->value);
+        
+        PONT actualA = a;
+        PONT menorA = a;
+        PONT actualB = b;
+        PONT menorB = b;
+        while (actualA->next != NULL)
+        {
+            if(actualA->next->value < menorA->value) {
+                menorA = actualA->next;
+            }
 
+            actualA = actualA->next;
+        }
+
+        while (actualB->next != NULL)
+        {
+            if(actualB->next->value < menorB->value) {
+                menorB = actualB->next;
+            }
+
+            actualB = actualB->next;
+        }
+        
+        
         mergeSort(&a);
         mergeSort(&b);
-        printf("comeca merge\n");
+        printf("comeca merge com pont a: %d e pont b: %d\n", menorA->value, menorB->value);
+        ordenada = merge(menorA, menorB);
+        showList(ordenada);
     }
+
+    *list = ordenada;
+}
+
+PONT merge(PONT a, PONT b) {
+    //PONT a e PONT b precisam ser as partes ordenadas
+    //pegar um lado e ordenar com o outro
+    //pegar o inicio de um lado ordenado e o inicio do outro lado ordenado
+    PONT nextA = a;
+    PONT pontToBeReturned = b;
+
+    if(a->next == NULL && b->next == NULL) {
+        if(b->value < a->value) {
+            b->next = a;
+            return pontToBeReturned;
+        }
+
+        a->next = b;
+        return pontToBeReturned = a;
+    }
+
+    if(a->value < b->value) {
+        if(a->next != NULL && a->next->value < b->value) {
+            nextA = a->next->next;
+            a->next->next = b;
+        } else {
+            nextA = a->next;
+            a->next = b;
+        }
+
+        pontToBeReturned = a;
+    } 
+
+    while(nextA != NULL)
+    {
+        if(b->next != NULL && nextA->value < b->next->value) {
+            PONT temp = nextA->next;
+            PONT nextB = b->next;
+            b->next = nextA;
+            nextA->next = nextB;
+            nextA = temp;
+         }
+        else if(b->next == NULL) {
+            PONT temp = nextA->next;
+            PONT nextB = b->next;
+            b->next = nextA;
+            nextA->next = nextB;
+            nextA = temp;
+        }
+
+        b = b->next;
+    }
+        
+    return pontToBeReturned;
 }
