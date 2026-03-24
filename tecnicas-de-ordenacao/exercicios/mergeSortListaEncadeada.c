@@ -18,16 +18,21 @@ void showList(PONT list);
 int main(void) {
     PONT list = NULL;
     
-    insert(&list, 5);
-    insert(&list, 1);
+    insert(&list, 34);
+    insert(&list, 23);
     insert(&list, 9);
-    insert(&list, 3);
-    insert(&list, 7);
-    insert(&list, 10);
-    insert(&list, 2);
-    insert(&list, 4);
-    insert(&list, 8);
+    insert(&list, 34);
     insert(&list, 6);
+    insert(&list, 0);
+    insert(&list, 6);
+    insert(&list, 1);
+    insert(&list, 90);
+    insert(&list, 54);
+    insert(&list, 10);
+    insert(&list, 243);
+    insert(&list, 156);
+    insert(&list, 4);
+    insert(&list, 7);
 
     showList(list);
 
@@ -72,40 +77,32 @@ void mergeSort(PONT *list) {
     PONT ordenada;
 
     if((*list)->next != NULL) {
-        int length = calcLength(list);
-        int half = length / 2;
+        PONT origin = *list;
+        PONT a;
+        PONT b;
 
-        PONT a = *list;
-        PONT end = *list;
-        PONT before;
-        for(int i = 0; i < half; i++) {
-            before = end;
-            end = end->next;
-        }
-
-        PONT b = end;
-        before->next = NULL;
-
-        printf("lado esquerdo: %d\n", a->value);
-        printf("lado direito: %d\n", b->value);
+        split(origin, &a, &b);
         
         PONT actualA = a;
-        PONT menorA = a;
+        PONT smallestA = a;
         PONT actualB = b;
-        PONT menorB = b;
+        PONT smallsetB = b;
+        
+        //Pegando menor numero do lado a
         while (actualA->next != NULL)
         {
-            if(actualA->next->value < menorA->value) {
-                menorA = actualA->next;
+            if(actualA->next->value < smallestA->value) {
+                smallestA = actualA->next;
             }
 
             actualA = actualA->next;
         }
 
+        //Pegando menor numero do lado b
         while (actualB->next != NULL)
         {
-            if(actualB->next->value < menorB->value) {
-                menorB = actualB->next;
+            if(actualB->next->value < smallsetB->value) {
+                smallsetB = actualB->next;
             }
 
             actualB = actualB->next;
@@ -114,62 +111,74 @@ void mergeSort(PONT *list) {
         
         mergeSort(&a);
         mergeSort(&b);
-        printf("comeca merge com pont a: %d e pont b: %d\n", menorA->value, menorB->value);
-        ordenada = merge(menorA, menorB);
-        showList(ordenada);
+        
+        ordenada = merge(smallestA, smallsetB);
+        
     }
 
     *list = ordenada;
 }
 
+void split(PONT origem, PONT *a, PONT *b) {
+    int length = calcLength(&origem);
+    int half = length / 2;
+
+    *a = origem;
+    PONT end = origem;
+    PONT before;
+    for(int i = 0; i < half; i++) {
+        before = end;
+        end = end->next;
+    }
+
+    *b = end;
+    before->next = NULL;
+}
+
 PONT merge(PONT a, PONT b) {
-    //PONT a e PONT b precisam ser as partes ordenadas
-    //pegar um lado e ordenar com o outro
-    //pegar o inicio de um lado ordenado e o inicio do outro lado ordenado
+    
     PONT nextA = a;
     PONT pontToBeReturned = b;
 
     if(a->next == NULL && b->next == NULL) {
-        if(b->value < a->value) {
-            b->next = a;
-            return pontToBeReturned;
-        }
-
-        a->next = b;
-        return pontToBeReturned = a;
-    }
-
-    if(a->value < b->value) {
-        if(a->next != NULL && a->next->value < b->value) {
-            nextA = a->next->next;
-            a->next->next = b;
-        } else {
-            nextA = a->next;
+        if(a->value < b->value) {
             a->next = b;
+            pontToBeReturned = a;
+        } else {
+            b->next = a;
+        }
+    } else {
+        PONT elementToCompare = a;
+        PONT elementToBeCompared = b;
+
+        if(a->value < b->value) {
+            elementToCompare = b;
+            elementToBeCompared = a;
+            pontToBeReturned = a;
         }
 
-        pontToBeReturned = a;
-    } 
+        while (elementToBeCompared != NULL && elementToCompare != NULL)
+        {
+            if(elementToBeCompared->next != NULL) {
+                if(elementToCompare->value < elementToBeCompared->next->value) {
+                    PONT temp0 = elementToCompare->next;
+                    PONT temp1 = elementToBeCompared->next;
+                    elementToBeCompared->next = elementToCompare;
+                    elementToCompare->next = temp1;
+                    elementToCompare = temp0;
+                }
+            } 
+            else {
+                elementToBeCompared->next = elementToCompare;
+                break;
+            }
 
-    while(nextA != NULL)
-    {
-        if(b->next != NULL && nextA->value < b->next->value) {
-            PONT temp = nextA->next;
-            PONT nextB = b->next;
-            b->next = nextA;
-            nextA->next = nextB;
-            nextA = temp;
-         }
-        else if(b->next == NULL) {
-            PONT temp = nextA->next;
-            PONT nextB = b->next;
-            b->next = nextA;
-            nextA->next = nextB;
-            nextA = temp;
+            elementToBeCompared = elementToBeCompared->next;
         }
-
-        b = b->next;
+        
     }
+
+    
         
     return pontToBeReturned;
 }
