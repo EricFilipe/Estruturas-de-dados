@@ -1,8 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-
-//dividir lista no meio
-//dividir recursivamente
+#include<ctype.h>
 
 typedef struct no {
     int value;
@@ -22,7 +20,7 @@ int main(void) {
     insert(&list, 23);
     insert(&list, 9);
     insert(&list, 34);
-    insert(&list, 6);
+    insert(&list, 4);
     insert(&list, 0);
     insert(&list, 6);
     insert(&list, 1);
@@ -31,7 +29,7 @@ int main(void) {
     insert(&list, 10);
     insert(&list, 243);
     insert(&list, 156);
-    insert(&list, 4);
+    insert(&list, 6);
     insert(&list, 7);
 
     showList(list);
@@ -41,6 +39,7 @@ int main(void) {
 
     showList(list);
 }
+
 
 void insert(PONT *list, int value) {
     PONT new = (PONT) malloc(sizeof(NO));
@@ -74,7 +73,7 @@ int calcLength(PONT *list) {
 }
 
 void mergeSort(PONT *list) {
-    PONT ordenada;
+    PONT sorted;
 
     if((*list)->next != NULL) {
         PONT origin = *list;
@@ -108,15 +107,12 @@ void mergeSort(PONT *list) {
             actualB = actualB->next;
         }
         
-        
         mergeSort(&a);
         mergeSort(&b);
-        
-        ordenada = merge(smallestA, smallsetB);
-        
+        sorted = merge(smallestA, smallsetB);
     }
 
-    *list = ordenada;
+    *list = sorted;
 }
 
 void split(PONT origem, PONT *a, PONT *b) {
@@ -135,50 +131,49 @@ void split(PONT origem, PONT *a, PONT *b) {
     before->next = NULL;
 }
 
+// PONT a e PONT b precisam ser as partes ordenadas
+// pegar o inicio de um lado ordenado e o inicio do outro lado ordenado
+// pegar um lado e ordenar com o outro
 PONT merge(PONT a, PONT b) {
-    
-    PONT nextA = a;
-    PONT pontToBeReturned = b;
-
-    if(a->next == NULL && b->next == NULL) {
-        if(a->value < b->value) {
-            a->next = b;
-            pontToBeReturned = a;
-        } else {
-            b->next = a;
-        }
-    } else {
-        PONT elementToCompare = a;
-        PONT elementToBeCompared = b;
-
-        if(a->value < b->value) {
-            elementToCompare = b;
-            elementToBeCompared = a;
-            pontToBeReturned = a;
-        }
-
-        while (elementToBeCompared != NULL && elementToCompare != NULL)
-        {
-            if(elementToBeCompared->next != NULL) {
-                if(elementToCompare->value < elementToBeCompared->next->value) {
-                    PONT temp0 = elementToCompare->next;
-                    PONT temp1 = elementToBeCompared->next;
-                    elementToBeCompared->next = elementToCompare;
-                    elementToCompare->next = temp1;
-                    elementToCompare = temp0;
-                }
-            } 
-            else {
-                elementToBeCompared->next = elementToCompare;
-                break;
-            }
-
-            elementToBeCompared = elementToBeCompared->next;
-        }
-        
+    PONT pontToBeReturned;
+    PONT sorted;
+    if (a->value < b->value)
+    {
+        pontToBeReturned = a;
+        sorted = a;
+        a = a->next;
+    }
+    else 
+    {
+        pontToBeReturned = b;
+        sorted = b;
+        b = b->next;
     }
 
-    
+    while (a != NULL && b != NULL)
+    {
+        if (b->value < a->value)
+        {
+            sorted->next = b;
+            b = b->next;
+            sorted = sorted->next;
+        }
+        else
+        {
+            sorted->next = a;
+            a = a->next;
+            sorted = sorted->next;
+        }
+    }
+
+    if (a == NULL)
+    {
+        sorted->next = b;
+    }    
+    else
+    {
+        sorted->next = a;
+    }
         
     return pontToBeReturned;
 }
