@@ -16,25 +16,19 @@ void showList(PONT list);
 int main(void) {
     PONT list = NULL;
     
-    insert(&list, 34);
-    insert(&list, 23);
-    insert(&list, 9);
-    insert(&list, 34);
-    insert(&list, 4);
-    insert(&list, 0);
-    insert(&list, 6);
+    insert(&list, 13);
     insert(&list, 1);
+    insert(&list, 56);
+    insert(&list, 20);
+    insert(&list, 22);
+    insert(&list, 84);
     insert(&list, 90);
-    insert(&list, 54);
-    insert(&list, 10);
-    insert(&list, 243);
-    insert(&list, 156);
-    insert(&list, 6);
-    insert(&list, 7);
+    insert(&list, 1);
 
     showList(list);
 
     mergeSort(&list);
+
     printf("\n");
 
     showList(list);
@@ -49,6 +43,12 @@ void insert(PONT *list, int value) {
 }
 
 void showList(PONT list) {
+    if (list == NULL)
+    {
+        printf("Lista vazia\n");
+        return;
+    }
+
     while (list->next != NULL)
     {
         printf("%d -> ", list->value);
@@ -59,8 +59,8 @@ void showList(PONT list) {
     
 }
 
-int calcLength(PONT *list) {
-    PONT end = *list;
+int calcLength(PONT list) {
+    PONT end = list;
     int length = 0;
 
     while (end)
@@ -73,50 +73,24 @@ int calcLength(PONT *list) {
 }
 
 void mergeSort(PONT *list) {
-    PONT sorted;
 
-    if((*list)->next != NULL) {
-        PONT origin = *list;
-        PONT a;
-        PONT b;
+    if ((*list) == NULL || (*list)->next == NULL) return;
 
-        split(origin, &a, &b);
-        
-        PONT actualA = a;
-        PONT smallestA = a;
-        PONT actualB = b;
-        PONT smallsetB = b;
-        
-        //Pegando menor numero do lado a
-        while (actualA->next != NULL)
-        {
-            if(actualA->next->value < smallestA->value) {
-                smallestA = actualA->next;
-            }
+    PONT origin = *list;
+    PONT a;
+    PONT b;
 
-            actualA = actualA->next;
-        }
-
-        //Pegando menor numero do lado b
-        while (actualB->next != NULL)
-        {
-            if(actualB->next->value < smallsetB->value) {
-                smallsetB = actualB->next;
-            }
-
-            actualB = actualB->next;
-        }
-        
-        mergeSort(&a);
-        mergeSort(&b);
-        sorted = merge(smallestA, smallsetB);
-    }
-
-    *list = sorted;
+    split(origin, &a, &b);
+    
+    mergeSort(&a);
+    
+    mergeSort(&b);
+    
+    *list = merge(a, b);
 }
 
 void split(PONT origem, PONT *a, PONT *b) {
-    int length = calcLength(&origem);
+    int length = calcLength(origem);
     int half = length / 2;
 
     *a = origem;
