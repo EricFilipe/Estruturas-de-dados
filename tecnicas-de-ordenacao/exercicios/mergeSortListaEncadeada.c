@@ -59,19 +59,6 @@ void showList(PONT list) {
     
 }
 
-int calcLength(PONT list) {
-    PONT end = list;
-    int length = 0;
-
-    while (end)
-    {
-        length++;
-        end = end->next;    
-    }
-    
-    return length;
-}
-
 void mergeSort(PONT *list) {
 
     if ((*list) == NULL || (*list)->next == NULL) return;
@@ -90,19 +77,19 @@ void mergeSort(PONT *list) {
 }
 
 void split(PONT origem, PONT *a, PONT *b) {
-    int length = calcLength(origem);
-    int half = length / 2;
+    PONT slow = origem;
+    PONT fast = origem->next;
 
-    *a = origem;
-    PONT end = origem;
-    PONT before;
-    for(int i = 0; i < half; i++) {
-        before = end;
-        end = end->next;
+    while (fast != NULL && fast->next != NULL)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
     }
 
-    *b = end;
-    before->next = NULL;
+    *a = origem;
+    *b = slow->next;
+
+    slow->next = NULL;
 }
 
 // PONT a e PONT b precisam ser as partes ordenadas
